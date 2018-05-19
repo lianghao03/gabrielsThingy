@@ -1,0 +1,15 @@
+{
+    "name": "xiurobert/gabrielhackathon",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "xiurobert",
+            "email": "xiurobert@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "propel/propel": "~2.0@dev"
+    }
+}

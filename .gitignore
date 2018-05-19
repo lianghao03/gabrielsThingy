@@ -1,0 +1,4 @@
+propel.yml.dist
+generated-conf/
+generated-sql/
+vendor/
