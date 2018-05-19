@@ -19,13 +19,16 @@ if (isset($_POST)) {
 
     if ($_POST["action"] == "login"){
         $usr = $uQ::create()->findOneByUsername($_POST["username"]);
+
         if (password_verify($_POST["password"], $usr->getPassword())) {
             // logged in
-            echo "<p>Logged in!</p>";
-            session_name($_POST["username"]);
             session_start();
             $_SESSION["username"] = $_POST["username"];
             $_SESSION["loggedIn"] = true;
+            $_SESSION["points"] = $usr->getLevel();
+
+            echo "LG";
+            exit();
 
         } else {
             echo "<p>Access denied. Incorrect username or password.</p>";
@@ -39,19 +42,23 @@ if (isset($_POST)) {
             $signedup = new User();
             $signedup->setUsername($_POST["username"]);
             $signedup->setPassword(password_hash($_POST["password"], PASSWORD_DEFAULT));
+            $signedup->setLevel(0);
             try {
                 echo "<p>Signed up successfully!</p>";
                 $signedup->save();
                 // signed up now
-                session_name($_POST["username"]);
                 session_start();
                 $_SESSION["username"] = $_POST["username"];
                 $_SESSION["loggedIn"] = true;
+                $_SESSION["points"] = $signedup->getLevel();
+                exit();
             } catch (PropelException $propelException) {
                 echo $propelException->getTraceAsString();
 
             }
         }
+    } else {
+        echo "No action provided";
     }
 
 

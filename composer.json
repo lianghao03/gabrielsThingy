@@ -11,5 +11,9 @@
     "minimum-stability": "dev",
     "require": {
         "propel/propel": "~2.0@dev"
+    },
+
+    "autoload": {
+        "psr-4": {"HkDB\\": "HkDB"}
     }
 }

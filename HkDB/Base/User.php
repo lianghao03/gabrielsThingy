@@ -95,6 +95,13 @@ abstract class User implements ActiveRecordInterface
     protected $skills_unserialized;
 
     /**
+     * The value for the level field.
+     *
+     * @var        int
+     */
+    protected $level;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -387,6 +394,16 @@ abstract class User implements ActiveRecordInterface
     } // hasSkill()
 
     /**
+     * Get the [level] column value.
+     *
+     * @return int
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param int $v new value
@@ -498,6 +515,26 @@ abstract class User implements ActiveRecordInterface
     } // removeSkill()
 
     /**
+     * Set the value of [level] column.
+     *
+     * @param int $v new value
+     * @return $this|\HkDB\User The current object (for fluent API support)
+     */
+    public function setLevel($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->level !== $v) {
+            $this->level = $v;
+            $this->modifiedColumns[UserTableMap::COL_LEVEL] = true;
+        }
+
+        return $this;
+    } // setLevel()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -545,6 +582,9 @@ abstract class User implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : UserTableMap::translateFieldName('Skills', TableMap::TYPE_PHPNAME, $indexType)];
             $this->skills = $col;
             $this->skills_unserialized = null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : UserTableMap::translateFieldName('Level', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->level = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -553,7 +593,7 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = UserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\HkDB\\User'), 0, $e);
@@ -766,6 +806,9 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_SKILLS)) {
             $modifiedColumns[':p' . $index++]  = 'skills';
         }
+        if ($this->isColumnModified(UserTableMap::COL_LEVEL)) {
+            $modifiedColumns[':p' . $index++]  = 'level';
+        }
 
         $sql = sprintf(
             'INSERT INTO users (%s) VALUES (%s)',
@@ -788,6 +831,9 @@ abstract class User implements ActiveRecordInterface
                         break;
                     case 'skills':
                         $stmt->bindValue($identifier, $this->skills, PDO::PARAM_STR);
+                        break;
+                    case 'level':
+                        $stmt->bindValue($identifier, $this->level, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -863,6 +909,9 @@ abstract class User implements ActiveRecordInterface
             case 3:
                 return $this->getSkills();
                 break;
+            case 4:
+                return $this->getLevel();
+                break;
             default:
                 return null;
                 break;
@@ -896,6 +945,7 @@ abstract class User implements ActiveRecordInterface
             $keys[1] => $this->getUsername(),
             $keys[2] => $this->getPassword(),
             $keys[3] => $this->getSkills(),
+            $keys[4] => $this->getLevel(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -951,6 +1001,9 @@ abstract class User implements ActiveRecordInterface
                 }
                 $this->setSkills($value);
                 break;
+            case 4:
+                $this->setLevel($value);
+                break;
         } // switch()
 
         return $this;
@@ -988,6 +1041,9 @@ abstract class User implements ActiveRecordInterface
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setSkills($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setLevel($arr[$keys[4]]);
         }
     }
 
@@ -1041,6 +1097,9 @@ abstract class User implements ActiveRecordInterface
         }
         if ($this->isColumnModified(UserTableMap::COL_SKILLS)) {
             $criteria->add(UserTableMap::COL_SKILLS, $this->skills);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_LEVEL)) {
+            $criteria->add(UserTableMap::COL_LEVEL, $this->level);
         }
 
         return $criteria;
@@ -1131,6 +1190,7 @@ abstract class User implements ActiveRecordInterface
         $copyObj->setUsername($this->getUsername());
         $copyObj->setPassword($this->getPassword());
         $copyObj->setSkills($this->getSkills());
+        $copyObj->setLevel($this->getLevel());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1171,6 +1231,7 @@ abstract class User implements ActiveRecordInterface
         $this->password = null;
         $this->skills = null;
         $this->skills_unserialized = null;
+        $this->level = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

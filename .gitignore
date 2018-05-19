@@ -1,4 +1,4 @@
-propel.yml.dist
+propel.yml
 generated-conf/
 generated-sql/
 vendor/

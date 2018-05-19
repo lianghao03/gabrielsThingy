@@ -41,7 +41,7 @@
         <column name="username" type="varchar" size="255" required="true" />
         <column name="password" type="varchar" size="255" required="true" />
         <column name="skills" type="array" required="" />
-
+        <column name="level" type="integer" required="true" />
     </table>
 
 
