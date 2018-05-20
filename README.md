@@ -7,4 +7,4 @@ Software developed by ZeroLiability Studios in conjunction with InfiniaPress Sof
 
 ## Licensing
 
-This project is licensed under the GNU GPL License v3. Please view [LICENSE]()
+This project is licensed under the GNU GPL License v3. Please view [LICENSE](LICENSE)

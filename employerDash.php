@@ -6,6 +6,9 @@
  * Time: 9:24 AM
  */
 
+require "vendor/autoload.php";
+require "generated-conf/config.php";
+use HkDB\UserQuery;
 
 session_start();
 
@@ -15,9 +18,16 @@ if (!$_SESSION["loggedIn"] == true)
 if ($_SESSION["usrType"] == "user")
     header("Location: profilePage.php");
 
+if (isset($_GET["a"]) && isset($_GET["skill"])) {
 
+    if ($_GET["a"] == "addSkill") {
 
+    }
 
+    if ($_GET["a"] == "deleteSkill") {
+
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -59,7 +69,7 @@ if ($_SESSION["usrType"] == "user")
 
                     <form class="form-inline" >
                         <div class="search-box">
-                            <input class="form-control mr-sm-2" id="search" type="search" placeholder="User" aria-label="Search">
+                            <input class="form-control mr-sm-2" id="search" type="search" placeholder="Search User" aria-label="Search">
                             <div class="results"></div>
                         </div>
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="livesearch()">Search</button>
@@ -69,19 +79,67 @@ if ($_SESSION["usrType"] == "user")
 
             </div>
         </nav>
-
         <div id="contents">
             <section id="exploreUsrs">
                 <div class="container">
+                    <br>
                     <h1>Explore Users</h1>
-
+                    <p>Hey</p>
                 </div>
             </section>
             <section id="hiringPrefs">
                 <div class="container">
+                    <h1>
+                        Preferred skills
+                    </h1>
 
+                    <div id="prefSkills">
+                        <?php
+                        $usr = UserQuery::create()->findOneByUsername($_SESSION["username"]);
+                        $skills = $usr->getSkills();
+
+                        foreach ($skills as $skill) {
+                            echo <<<EOF
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">$skill</h5>
+        <a href="employerDash.php?a=deleteSkill&skill=$skill" class="btn btn-danger">Delete this skill</a>
+    </div>
+</div> 
+EOF;
+
+                        }
+                        ?>
+                    </div>
+
+                    <h1>Discover skills</h1>
+
+                    <div id="discoverSkills">
+                        <div class="card" style="width: 18rem">
+                            <div class="card-body">
+                                <h5 class="card-title">Python 3</h5>
+                                <p class="card-text">Python is a programming language that is basically psuedocode</p>
+                                <a href="employerDash.php?a=addSkill&skill=python3" class="btn btn-success">Prefer skill</a>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </section>
         </div>
+
+        <script>
+            $("#contents").onepage_scroll({
+                sectionContainer: "section",
+                easing: "ease",
+                animationTime: 1000,
+                pagination: false,
+                updateURL: true,
+                loop: false,
+                keyboard: true,
+                responsiveFallback: false,
+                direction: "vertical"
+            });
+        </script>
     </body>
 </html>

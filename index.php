@@ -51,15 +51,17 @@ if (isset ($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true)
 
             var usrType;
             function selectUser() {
-                usrType = "user"
+                usrType = "user";
+                $("#selectUsrTypeBtn").html("User")
             }
 
             function selectEmployer() {
-                usrType = "employer"
+                usrType = "employer";
+                $("#selectUsrTypeBtn").html("Employer")
             }
             function signup() {
 
-                if (!$("#select").innerHTML) {
+                if (!$("#select").html().trim().length) {
                     $("#select").html(
                         '<div class="dropdown">' +
                         '   <button class="btn btn-secondary dropdown-toggle" type="button" id="selectUsrTypeBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
@@ -72,6 +74,7 @@ if (isset ($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true)
                         '</div>'
                     );
                 } else {
+
                     $.ajax({
                         url: "loginSignup.php",
                         type: "POST",
@@ -140,12 +143,13 @@ if (isset ($_SESSION["loggedIn"]) && $_SESSION["loggedIn"] == true)
                 </div>
 
             </div>
+            <div id="select" style="padding-bottom: 1.3%;">
+
+            </div>
             <button id="login" class="btn btn-primary" onclick="login()">Log in</button>
             <button id="signup" class="btn btn-secondary" onclick="signup()">Sign up</button>
 
-            <div id="select" style="padding-top: 1.3%;">
 
-            </div>
         </div>
     </div>
 

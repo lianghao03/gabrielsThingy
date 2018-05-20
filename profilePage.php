@@ -97,7 +97,7 @@ if (isset($_GET["a"])) {
 
                 <form class="form-inline" >
                     <div class="search-box">
-                        <input class="form-control mr-sm-2" id="search" type="search" placeholder="User or Video" aria-label="Search">
+                        <input class="form-control mr-sm-2" id="search" type="search" placeholder="Search User or Video" aria-label="Search">
                         <div class="results"></div>
                     </div>
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="livesearch()">Search</button>
@@ -170,15 +170,9 @@ if (isset($_GET["a"])) {
         }
 
         $(document).ready(function() {
-
-
-
-
             $('.search-box').find('input[type="text"]').on("keyup input", function () {
                 livesearch();
             });
-
-
         });
     </script>
     </body>
