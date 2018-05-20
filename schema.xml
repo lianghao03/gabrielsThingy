@@ -40,8 +40,10 @@
         <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
         <column name="username" type="varchar" size="255" required="true" />
         <column name="password" type="varchar" size="255" required="true" />
-        <column name="skills" type="array" required="" />
+        <column name="skills" type="array" />
         <column name="level" type="integer" required="true" />
+        <column name="isEmployer" type="boolean" required="true" />
+
     </table>
 
 

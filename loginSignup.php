@@ -27,6 +27,12 @@ if (isset($_POST)) {
             $_SESSION["loggedIn"] = true;
             $_SESSION["points"] = $usr->getLevel();
 
+            if ($usr->getIsemployer()) {
+                $_SESSION["usrType"] = "employer";
+            } else {
+                $_SESSION["usrType"] = "user";
+            }
+
             echo "LG";
             exit();
 
@@ -43,6 +49,11 @@ if (isset($_POST)) {
             $signedup->setUsername($_POST["username"]);
             $signedup->setPassword(password_hash($_POST["password"], PASSWORD_DEFAULT));
             $signedup->setLevel(0);
+            if ($_POST["usertype"] == "user") {
+                $signedup->setIsemployer(false);
+            } else {
+                $signedup->setIsemployer(true);
+            }
             try {
                 echo "<p>Signed up successfully!</p>";
                 $signedup->save();
@@ -51,6 +62,7 @@ if (isset($_POST)) {
                 $_SESSION["username"] = $_POST["username"];
                 $_SESSION["loggedIn"] = true;
                 $_SESSION["points"] = $signedup->getLevel();
+                $_SESSION["usrType"] = $_POST["usertype"];
                 exit();
             } catch (PropelException $propelException) {
                 echo $propelException->getTraceAsString();

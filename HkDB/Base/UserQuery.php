@@ -24,12 +24,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery orderByPassword($order = Criteria::ASC) Order by the password column
  * @method     ChildUserQuery orderBySkills($order = Criteria::ASC) Order by the skills column
  * @method     ChildUserQuery orderByLevel($order = Criteria::ASC) Order by the level column
+ * @method     ChildUserQuery orderByIsemployer($order = Criteria::ASC) Order by the isEmployer column
  *
  * @method     ChildUserQuery groupById() Group by the id column
  * @method     ChildUserQuery groupByUsername() Group by the username column
  * @method     ChildUserQuery groupByPassword() Group by the password column
  * @method     ChildUserQuery groupBySkills() Group by the skills column
  * @method     ChildUserQuery groupByLevel() Group by the level column
+ * @method     ChildUserQuery groupByIsemployer() Group by the isEmployer column
  *
  * @method     ChildUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -46,7 +48,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser findOneByUsername(string $username) Return the first ChildUser filtered by the username column
  * @method     ChildUser findOneByPassword(string $password) Return the first ChildUser filtered by the password column
  * @method     ChildUser findOneBySkills(array $skills) Return the first ChildUser filtered by the skills column
- * @method     ChildUser findOneByLevel(int $level) Return the first ChildUser filtered by the level column *
+ * @method     ChildUser findOneByLevel(int $level) Return the first ChildUser filtered by the level column
+ * @method     ChildUser findOneByIsemployer(boolean $isEmployer) Return the first ChildUser filtered by the isEmployer column *
 
  * @method     ChildUser requirePk($key, ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOne(ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -56,6 +59,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneByPassword(string $password) Return the first ChildUser filtered by the password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneBySkills(array $skills) Return the first ChildUser filtered by the skills column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByLevel(int $level) Return the first ChildUser filtered by the level column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByIsemployer(boolean $isEmployer) Return the first ChildUser filtered by the isEmployer column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
  * @method     ChildUser[]|ObjectCollection findById(int $id) Return ChildUser objects filtered by the id column
@@ -63,6 +67,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser[]|ObjectCollection findByPassword(string $password) Return ChildUser objects filtered by the password column
  * @method     ChildUser[]|ObjectCollection findBySkills(array $skills) Return ChildUser objects filtered by the skills column
  * @method     ChildUser[]|ObjectCollection findByLevel(int $level) Return ChildUser objects filtered by the level column
+ * @method     ChildUser[]|ObjectCollection findByIsemployer(boolean $isEmployer) Return ChildUser objects filtered by the isEmployer column
  * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -161,7 +166,7 @@ abstract class UserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT id, username, password, skills, level FROM users WHERE id = :p0';
+        $sql = 'SELECT id, username, password, skills, level, isEmployer FROM users WHERE id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -462,6 +467,33 @@ abstract class UserQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(UserTableMap::COL_LEVEL, $level, $comparison);
+    }
+
+    /**
+     * Filter the query on the isEmployer column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsemployer(true); // WHERE isEmployer = true
+     * $query->filterByIsemployer('yes'); // WHERE isEmployer = true
+     * </code>
+     *
+     * @param     boolean|string $isemployer The value to use as filter.
+     *              Non-boolean arguments are converted using the following rules:
+     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByIsemployer($isemployer = null, $comparison = null)
+    {
+        if (is_string($isemployer)) {
+            $isemployer = in_array(strtolower($isemployer), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        }
+
+        return $this->addUsingAlias(UserTableMap::COL_ISEMPLOYER, $isemployer, $comparison);
     }
 
     /**

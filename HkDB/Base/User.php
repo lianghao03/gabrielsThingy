@@ -102,6 +102,13 @@ abstract class User implements ActiveRecordInterface
     protected $level;
 
     /**
+     * The value for the isemployer field.
+     *
+     * @var        boolean
+     */
+    protected $isemployer;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -404,6 +411,26 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
+     * Get the [isemployer] column value.
+     *
+     * @return boolean
+     */
+    public function getIsemployer()
+    {
+        return $this->isemployer;
+    }
+
+    /**
+     * Get the [isemployer] column value.
+     *
+     * @return boolean
+     */
+    public function isIsemployer()
+    {
+        return $this->getIsemployer();
+    }
+
+    /**
      * Set the value of [id] column.
      *
      * @param int $v new value
@@ -535,6 +562,34 @@ abstract class User implements ActiveRecordInterface
     } // setLevel()
 
     /**
+     * Sets the value of the [isemployer] column.
+     * Non-boolean arguments are converted using the following rules:
+     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     *
+     * @param  boolean|integer|string $v The new value
+     * @return $this|\HkDB\User The current object (for fluent API support)
+     */
+    public function setIsemployer($v)
+    {
+        if ($v !== null) {
+            if (is_string($v)) {
+                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+            } else {
+                $v = (boolean) $v;
+            }
+        }
+
+        if ($this->isemployer !== $v) {
+            $this->isemployer = $v;
+            $this->modifiedColumns[UserTableMap::COL_ISEMPLOYER] = true;
+        }
+
+        return $this;
+    } // setIsemployer()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -585,6 +640,9 @@ abstract class User implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : UserTableMap::translateFieldName('Level', TableMap::TYPE_PHPNAME, $indexType)];
             $this->level = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('Isemployer', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->isemployer = (null !== $col) ? (boolean) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -593,7 +651,7 @@ abstract class User implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 5; // 5 = UserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = UserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\HkDB\\User'), 0, $e);
@@ -809,6 +867,9 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_LEVEL)) {
             $modifiedColumns[':p' . $index++]  = 'level';
         }
+        if ($this->isColumnModified(UserTableMap::COL_ISEMPLOYER)) {
+            $modifiedColumns[':p' . $index++]  = 'isEmployer';
+        }
 
         $sql = sprintf(
             'INSERT INTO users (%s) VALUES (%s)',
@@ -834,6 +895,9 @@ abstract class User implements ActiveRecordInterface
                         break;
                     case 'level':
                         $stmt->bindValue($identifier, $this->level, PDO::PARAM_INT);
+                        break;
+                    case 'isEmployer':
+                        $stmt->bindValue($identifier, (int) $this->isemployer, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -912,6 +976,9 @@ abstract class User implements ActiveRecordInterface
             case 4:
                 return $this->getLevel();
                 break;
+            case 5:
+                return $this->getIsemployer();
+                break;
             default:
                 return null;
                 break;
@@ -946,6 +1013,7 @@ abstract class User implements ActiveRecordInterface
             $keys[2] => $this->getPassword(),
             $keys[3] => $this->getSkills(),
             $keys[4] => $this->getLevel(),
+            $keys[5] => $this->getIsemployer(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1004,6 +1072,9 @@ abstract class User implements ActiveRecordInterface
             case 4:
                 $this->setLevel($value);
                 break;
+            case 5:
+                $this->setIsemployer($value);
+                break;
         } // switch()
 
         return $this;
@@ -1044,6 +1115,9 @@ abstract class User implements ActiveRecordInterface
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setLevel($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setIsemployer($arr[$keys[5]]);
         }
     }
 
@@ -1100,6 +1174,9 @@ abstract class User implements ActiveRecordInterface
         }
         if ($this->isColumnModified(UserTableMap::COL_LEVEL)) {
             $criteria->add(UserTableMap::COL_LEVEL, $this->level);
+        }
+        if ($this->isColumnModified(UserTableMap::COL_ISEMPLOYER)) {
+            $criteria->add(UserTableMap::COL_ISEMPLOYER, $this->isemployer);
         }
 
         return $criteria;
@@ -1191,6 +1268,7 @@ abstract class User implements ActiveRecordInterface
         $copyObj->setPassword($this->getPassword());
         $copyObj->setSkills($this->getSkills());
         $copyObj->setLevel($this->getLevel());
+        $copyObj->setIsemployer($this->getIsemployer());
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1232,6 +1310,7 @@ abstract class User implements ActiveRecordInterface
         $this->skills = null;
         $this->skills_unserialized = null;
         $this->level = null;
+        $this->isemployer = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

@@ -59,7 +59,7 @@ class UserTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class UserTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the id field
@@ -97,6 +97,11 @@ class UserTableMap extends TableMap
     const COL_LEVEL = 'users.level';
 
     /**
+     * the column name for the isEmployer field
+     */
+    const COL_ISEMPLOYER = 'users.isEmployer';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -108,11 +113,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'Username', 'Password', 'Skills', 'Level', ),
-        self::TYPE_CAMELNAME     => array('id', 'username', 'password', 'skills', 'level', ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD, UserTableMap::COL_SKILLS, UserTableMap::COL_LEVEL, ),
-        self::TYPE_FIELDNAME     => array('id', 'username', 'password', 'skills', 'level', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Id', 'Username', 'Password', 'Skills', 'Level', 'Isemployer', ),
+        self::TYPE_CAMELNAME     => array('id', 'username', 'password', 'skills', 'level', 'isemployer', ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_ID, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD, UserTableMap::COL_SKILLS, UserTableMap::COL_LEVEL, UserTableMap::COL_ISEMPLOYER, ),
+        self::TYPE_FIELDNAME     => array('id', 'username', 'password', 'skills', 'level', 'isEmployer', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -122,11 +127,11 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'Username' => 1, 'Password' => 2, 'Skills' => 3, 'Level' => 4, ),
-        self::TYPE_CAMELNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'skills' => 3, 'level' => 4, ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_USERNAME => 1, UserTableMap::COL_PASSWORD => 2, UserTableMap::COL_SKILLS => 3, UserTableMap::COL_LEVEL => 4, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'skills' => 3, 'level' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'Username' => 1, 'Password' => 2, 'Skills' => 3, 'Level' => 4, 'Isemployer' => 5, ),
+        self::TYPE_CAMELNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'skills' => 3, 'level' => 4, 'isemployer' => 5, ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_ID => 0, UserTableMap::COL_USERNAME => 1, UserTableMap::COL_PASSWORD => 2, UserTableMap::COL_SKILLS => 3, UserTableMap::COL_LEVEL => 4, UserTableMap::COL_ISEMPLOYER => 5, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'username' => 1, 'password' => 2, 'skills' => 3, 'level' => 4, 'isEmployer' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -151,6 +156,7 @@ class UserTableMap extends TableMap
         $this->addColumn('password', 'Password', 'VARCHAR', true, 255, null);
         $this->addColumn('skills', 'Skills', 'ARRAY', false, null, null);
         $this->addColumn('level', 'Level', 'INTEGER', true, null, null);
+        $this->addColumn('isEmployer', 'Isemployer', 'BOOLEAN', true, 1, null);
     } // initialize()
 
     /**
@@ -306,12 +312,14 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn(UserTableMap::COL_PASSWORD);
             $criteria->addSelectColumn(UserTableMap::COL_SKILLS);
             $criteria->addSelectColumn(UserTableMap::COL_LEVEL);
+            $criteria->addSelectColumn(UserTableMap::COL_ISEMPLOYER);
         } else {
             $criteria->addSelectColumn($alias . '.id');
             $criteria->addSelectColumn($alias . '.username');
             $criteria->addSelectColumn($alias . '.password');
             $criteria->addSelectColumn($alias . '.skills');
             $criteria->addSelectColumn($alias . '.level');
+            $criteria->addSelectColumn($alias . '.isEmployer');
         }
     }
 
