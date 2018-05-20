@@ -132,7 +132,7 @@ if (isset($_GET["a"])) {
             <h2>New Videos</h2>
             <div id="videos">
 
-                <a href="watchVideo.php?v=OwMoXjyUCPs">
+                <a href="watchVideo.php?v=Z1Yd7upQsXY">
                     <img src="https://i.ytimg.com/vi/OwMoXjyUCPs/hqdefault.jpg?sqp=-oaymwEZCPYBEIoBSFXyq4qpAwsIARUAAIZCGAFwAQ==&rs=AOn4CLA5pgjmKmA9VxBYGI9uYvI_fNXQbw">
                     <p>this GUILD TAG might get me BANNED...</p>
                 </a>
