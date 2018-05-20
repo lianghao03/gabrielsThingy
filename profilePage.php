@@ -34,11 +34,11 @@ if (isset($_GET["a"])) {
     }
 
     if ($_GET["a"] == "myProfile") {
-
+        //TODO
     }
 
     if ($_GET["a"] == "editProfile") {
-
+        //TODO
     }
 
 }

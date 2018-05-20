@@ -47,6 +47,14 @@
     </table>
 
 
+    <table name="skills" phpName="Skill">
+        <column name="id" type="integer" required="true" primaryKey="true" autoIncrement="true" />
+        <column name="skill" type="varchar" size="255" required="true" />
+        <column name="skillName" type="varchar" size="255" required="true" />
+        <column name="description" type="longvarchar" required="true" />
+    </table>
+
+
     <!--
         When you're done with editing, open a terminal and run
             `$ cd C:\Users\Robert\Documents\gabrielthingy`

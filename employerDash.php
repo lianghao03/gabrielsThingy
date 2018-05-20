@@ -9,6 +9,8 @@
 require "vendor/autoload.php";
 require "generated-conf/config.php";
 use HkDB\UserQuery;
+use HkDB\SkillQuery;
+use HkDB\Skill;
 
 session_start();
 
@@ -18,14 +20,44 @@ if (!$_SESSION["loggedIn"] == true)
 if ($_SESSION["usrType"] == "user")
     header("Location: profilePage.php");
 
-if (isset($_GET["a"]) && isset($_GET["skill"])) {
 
+
+// temp hardcode
+
+if (!SkillQuery::create()->findOneBySkill("python3")) {
+    $py3 = new Skill();
+
+    try {
+        $py3->setSkill("python3")
+            ->setSkillname("Python 3")
+            ->setDescription("Python 3 is a programming language that is basically psuedocode")
+            ->save();
+    } catch (\Propel\Runtime\Exception\PropelException $propelException) {
+        // do absolutely nothing
+    }
+
+}
+
+if (isset($_GET["a"]) && isset($_GET["skill"])) {
+    $cUsr = UserQuery::create()->findOneByUsername($_SESSION["username"]);
     if ($_GET["a"] == "addSkill") {
+        try {
+            $cUsr->addSkill($_GET["skill"])
+                ->save();
+        } catch (\Propel\Runtime\Exception\PropelException $propelException) {
+            echo "Error occurred trying to add the skill";
+        }
 
     }
 
     if ($_GET["a"] == "deleteSkill") {
+        try {
+            $cUsr->removeSkill($_GET["skill"])
+                ->save();
 
+        } catch (\Propel\Runtime\Exception\PropelException $propelException) {
+            echo "Error occurred trying to remove the skill";
+        }
     }
 }
 ?>
@@ -111,15 +143,17 @@ if (isset($_GET["a"]) && isset($_GET["skill"])) {
                     $skills = $usr->getSkills();
 
                     foreach ($skills as $skill) {
+
+                        $sk = SkillQuery::create()->findOneBySkill($skill);
                         echo <<<EOF
 <div class="card" style="width: 18rem;">
     <div class="card-body">
-        <h5 class="card-title">$skill</h5>
+        <h5 class="card-title">{$sk->getSkillname()}</h5>
+        <p class="card-text">{$sk->getDescription()}</p>
         <a href="employerDash.php?a=deleteSkill&skill=$skill" class="btn btn-danger">Delete this skill</a>
     </div>
 </div> 
 EOF;
-
                     }
                     ?>
                 </div>
@@ -151,6 +185,25 @@ EOF;
                 keyboard: true,
                 responsiveFallback: false,
                 direction: "vertical"
+            });
+
+            function livesearch() {
+                var searchterm = $("#search").val();
+                var results = $(".results");
+
+                if (searchterm.length) {
+                    $.get("search.php", {q: searchterm}).done(function (data) {
+                        results.html(data);
+                    })
+                } else {
+                    results.empty();
+                }
+            }
+
+            $(document).ready(function() {
+                $('.search-box').find('input[type="text"]').on("keyup input", function () {
+                    livesearch();
+                });
             });
         </script>
     </body>
