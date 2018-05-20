@@ -41,17 +41,32 @@ if (isset($_GET["a"]) && isset($_GET["skill"])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
+        <script src="https://cdn.rawgit.com/peachananr/onepage-scroll/master/jquery.onepage-scroll.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.rawgit.com/peachananr/onepage-scroll/master/onepage-scroll.css">
 
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Roboto');
+            html {
+                font-family: 'Roboto', sans-serif;
+            }
+
+            #contents {
+                text-align: center;
+            }
+            body {
+                padding-top: 4em;
+            }
+        </style>
     </head>
 
     <body>
         <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="profilePage.php">VELTIOS</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks" aria-controls="navbarLinks" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="" id="navbarLinks">
+            <div class="collapse navbar-collapse" id="navbarLinks">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="#" >Explore Users</a>
                     <a class="nav-item nav-link" href="#" >Hiring Preferences</a>
@@ -81,25 +96,22 @@ if (isset($_GET["a"]) && isset($_GET["skill"])) {
         </nav>
         <div id="contents">
             <section id="exploreUsrs">
-                <div class="container">
-                    <br>
-                    <h1>Explore Users</h1>
-                    <p>Hey</p>
-                </div>
+                <h1>Explore Users</h1>
+
             </section>
             <section id="hiringPrefs">
-                <div class="container">
-                    <h1>
-                        Preferred skills
-                    </h1>
 
-                    <div id="prefSkills">
-                        <?php
-                        $usr = UserQuery::create()->findOneByUsername($_SESSION["username"]);
-                        $skills = $usr->getSkills();
+                <h1>
+                    Preferred skills
+                </h1>
 
-                        foreach ($skills as $skill) {
-                            echo <<<EOF
+                <div id="prefSkills">
+                    <?php
+                    $usr = UserQuery::create()->findOneByUsername($_SESSION["username"]);
+                    $skills = $usr->getSkills();
+
+                    foreach ($skills as $skill) {
+                        echo <<<EOF
 <div class="card" style="width: 18rem;">
     <div class="card-body">
         <h5 class="card-title">$skill</h5>
@@ -108,23 +120,23 @@ if (isset($_GET["a"]) && isset($_GET["skill"])) {
 </div> 
 EOF;
 
-                        }
-                        ?>
-                    </div>
-
-                    <h1>Discover skills</h1>
-
-                    <div id="discoverSkills">
-                        <div class="card" style="width: 18rem">
-                            <div class="card-body">
-                                <h5 class="card-title">Python 3</h5>
-                                <p class="card-text">Python is a programming language that is basically psuedocode</p>
-                                <a href="employerDash.php?a=addSkill&skill=python3" class="btn btn-success">Prefer skill</a>
-                            </div>
-                        </div>
-
-                    </div>
+                    }
+                    ?>
                 </div>
+
+                <h1>Discover skills</h1>
+
+                <div id="discoverSkills">
+                    <div class="card" style="width: 18rem">
+                        <div class="card-body">
+                            <h5 class="card-title">Python 3</h5>
+                            <p class="card-text">Python is a programming language that is basically psuedocode</p>
+                            <a href="employerDash.php?a=addSkill&skill=python3" class="btn btn-success">Prefer skill</a>
+                        </div>
+                    </div>
+
+                </div>
+
             </section>
         </div>
 

@@ -67,6 +67,9 @@ if (isset($_GET["a"])) {
             html {
                 font-family: 'Roboto', sans-serif;
             }
+            body {
+                padding-top: 4em;
+            }
         </style>
     </head>
 
@@ -74,11 +77,11 @@ if (isset($_GET["a"])) {
 
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="profilePage.php">VELTIOS</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarLinks" aria-controls="navbarLinks" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="" id="navbarLinks">
+        <div class="collapse navbar-collapse" id="navbarLinks">
             <div class="navbar-nav">
                 <a class="nav-item nav-link" href="#" onclick="$('#contents').moveTo(1)">Explore</a>
                 <a class="nav-item nav-link" href="#" onclick="$('#contents').moveTo(2)">Learn</a>
@@ -110,8 +113,8 @@ if (isset($_GET["a"])) {
 
     <div id="contents">
 
-        <section id="explore">
-            <div id="container" style="text-align: center;">
+        <section id="explore" style="text-align: center">
+
                 <h1>Explore</h1>
                 <h2>Trending users</h2>
                 <a href="">
@@ -119,8 +122,6 @@ if (isset($_GET["a"])) {
                     <br>
                     <h2>Binner</h2>
                 </a>
-            </div>
-
 
         </section>
 
